@@ -37,7 +37,13 @@ CORS(app)
 
 def get_spotify_track_info(track_url):
     results = sp.track(track_url)
-    track_info = {"name": results["name"], "artist": results["artists"][0]["name"]}
+    track_info = {
+        "name": results["name"],
+        "artist": results["artists"][0]["name"],
+        "album": results["album"]["name"],
+    }
+    print(results)
+    print("\n\n\n ----------------------------------------------------------\n\n\n")
     return track_info
 
 
@@ -52,7 +58,11 @@ def get_spotify_playlist_info(playlist_url):
             if item["track"]:
                 track = item["track"]
                 tracks_info.append(
-                    {"name": track["name"], "artist": track["artists"][0]["name"]}
+                    {
+                        "name": track["name"],
+                        "artist": track["artists"][0]["name"],
+                        "album": track["album"]["name"],
+                    }
                 )
         if len(results["items"]) < limit:
             break
@@ -64,10 +74,18 @@ def get_spotify_album_info(album_url):
     album_id = album_url.split("/")[-1].split("?")[0]
     tracks_info = []
     results = sp.album_tracks(album_id)
+    album_info = sp.album(album_id)
+    album_name = album_info["name"]
+    release_date = album_info["release_date"]
     while True:
         for item in results["items"]:
             tracks_info.append(
-                {"name": item["name"], "artist": item["artists"][0]["name"]}
+                {
+                    "name": item["name"],
+                    "artist": item["artists"][0]["name"],
+                    "album": album_name,
+                    "release_date": release_date,
+                }
             )
         if not results["next"]:
             break
@@ -122,7 +140,7 @@ def download_youtube_audio(video_id, output_path, track_info):
 
 
 def download_and_get_file_path(track_info, output_path, quality, download_type):
-    query = f"{track_info['artist']} {track_info['name']}"
+    query = f"{track_info['artist']} {track_info['name']} {track_info['album']}"
     video_id = search_youtube(query)
 
     if download_type == "video":
