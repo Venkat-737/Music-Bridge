@@ -42,8 +42,6 @@ def get_spotify_track_info(track_url):
         "artist": results["artists"][0]["name"],
         "album": results["album"]["name"],
     }
-    print(results)
-    print("\n\n\n ----------------------------------------------------------\n\n\n")
     return track_info
 
 
