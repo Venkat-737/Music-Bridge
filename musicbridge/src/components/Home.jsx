@@ -26,7 +26,7 @@ function Home({ selectedOption }) {
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/download', {
+      const response = await fetch('http://10.128.0.2:5000/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
